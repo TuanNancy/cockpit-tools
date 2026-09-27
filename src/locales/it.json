@@ -2118,7 +2118,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Riavvia il daemon di Codex CLI",
-      "description": "Le credenziali sono state aggiornate, ma un daemon di Codex CLI in esecuzione potrebbe ancora usare l’account precedente, anche in un nuovo terminale. Termina le attività in corso, esegui il comando seguente e riapri la CLI. Il riavvio del daemon condiviso può interrompere le sessioni connesse."
+      "description": "Impossibile completare il riavvio automatico. Le credenziali sono state aggiornate, ma un daemon di Codex CLI in esecuzione potrebbe ancora usare l’account precedente, anche in un nuovo terminale. Termina le attività in corso, esegui il comando seguente e riapri la CLI. Il riavvio del daemon condiviso può interrompere le sessioni connesse."
     },
     "launchErrors": {
       "bindingFailed": "Impossibile confermare l’account associato. Avvio interrotto; riprova a cambiare account.",

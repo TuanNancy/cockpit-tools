@@ -1206,9 +1206,12 @@ pub async fn switch_codex_account(
         .await
     };
     // A failed switch can still have committed auth before config/index writes
-    // failed. Notify for that exact home before propagating errors or cancellation.
+    // failed. Restart that home's daemon before propagating errors or cancellation;
+    // fall back to a manual notice without replacing the original switch result.
     if let Some(codex_home) = committed_home.as_deref() {
-        if let Some(command) = crate::modules::codex_cli_daemon::restart_notice(codex_home).await {
+        if let Some(command) =
+            crate::modules::codex_cli_daemon::restart_after_auth_commit(codex_home).await
+        {
             let _ = app.emit("codex:cli-daemon-restart-required", command);
         }
     }

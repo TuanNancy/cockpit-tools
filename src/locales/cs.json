@@ -2118,7 +2118,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Restartujte démona Codex CLI",
-      "description": "Přihlašovací údaje byly aktualizovány, ale běžící démon Codex CLI může stále používat předchozí účet i v novém terminálu. Dokončete probíhající úlohy, spusťte následující příkaz a znovu otevřete CLI. Restart sdíleného démona může přerušit připojené relace."
+      "description": "Automatický restart se nepodařilo dokončit. Přihlašovací údaje byly aktualizovány, ale běžící démon Codex CLI může stále používat předchozí účet i v novém terminálu. Dokončete probíhající úlohy, spusťte následující příkaz a znovu otevřete CLI. Restart sdíleného démona může přerušit připojené relace."
     },
     "launchErrors": {
       "bindingFailed": "Nelze potvrdit přiřazení účtu. Spuštění zastaveno. Zkuste účet přepnout znovu.",

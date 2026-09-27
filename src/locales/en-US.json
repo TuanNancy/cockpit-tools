@@ -2338,7 +2338,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Restart the Codex CLI daemon",
-      "description": "Account credentials have been updated, but a running Codex CLI daemon may still use the previous account, even in a new terminal. Finish any active Codex CLI work, run the command below, then reopen the CLI. Restarting the shared daemon can interrupt connected sessions."
+      "description": "Automatic restart could not be completed. Account credentials have been updated, but a running Codex CLI daemon may still use the previous account, even in a new terminal. Finish any active Codex CLI work, run the command below, then reopen the CLI. Restarting the shared daemon can interrupt connected sessions."
     },
     "launchErrors": {
       "bindingFailed": "Account binding could not be confirmed. Launch stopped; retry switching accounts.",

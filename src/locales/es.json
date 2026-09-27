@@ -2118,7 +2118,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Reinicia el daemon de Codex CLI",
-      "description": "Las credenciales se han actualizado, pero un daemon de Codex CLI en ejecución podría seguir usando la cuenta anterior, incluso en una nueva terminal. Finaliza las tareas activas, ejecuta el siguiente comando y vuelve a abrir la CLI. Reiniciar el daemon compartido puede interrumpir las sesiones conectadas."
+      "description": "No se pudo completar el reinicio automático. Las credenciales se han actualizado, pero un daemon de Codex CLI en ejecución podría seguir usando la cuenta anterior, incluso en una nueva terminal. Finaliza las tareas activas, ejecuta el siguiente comando y vuelve a abrir la CLI. Reiniciar el daemon compartido puede interrumpir las sesiones conectadas."
     },
     "launchErrors": {
       "bindingFailed": "No se pudo confirmar la cuenta vinculada. Se detuvo el inicio; vuelve a cambiar de cuenta.",

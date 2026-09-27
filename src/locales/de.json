@@ -2118,7 +2118,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Codex-CLI-Daemon neu starten",
-      "description": "Die Zugangsdaten wurden aktualisiert, aber ein laufender Codex-CLI-Daemon verwendet möglicherweise weiterhin das vorherige Konto, auch in einem neuen Terminal. Beenden Sie laufende Aufgaben, führen Sie den folgenden Befehl aus und öffnen Sie die CLI erneut. Der Neustart des gemeinsamen Daemons kann verbundene Sitzungen unterbrechen."
+      "description": "Der automatische Neustart konnte nicht abgeschlossen werden. Die Zugangsdaten wurden aktualisiert, aber ein laufender Codex-CLI-Daemon verwendet möglicherweise weiterhin das vorherige Konto, auch in einem neuen Terminal. Beenden Sie laufende Aufgaben, führen Sie den folgenden Befehl aus und öffnen Sie die CLI erneut. Der Neustart des gemeinsamen Daemons kann verbundene Sitzungen unterbrechen."
     },
     "launchErrors": {
       "bindingFailed": "Die Kontozuordnung konnte nicht bestätigt werden. Start abgebrochen; bitte den Kontowechsel erneut versuchen.",

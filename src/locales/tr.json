@@ -2118,7 +2118,7 @@
   "codex": {
     "cliDaemon": {
       "title": "Codex CLI arka plan hizmetini yeniden başlatın",
-      "description": "Kimlik bilgileri güncellendi, ancak çalışan Codex CLI arka plan hizmeti yeni bir terminalde bile önceki hesabı kullanabilir. Etkin işleri tamamlayın, aşağıdaki komutu çalıştırın ve CLI’yi yeniden açın. Paylaşılan hizmeti yeniden başlatmak bağlı oturumları kesintiye uğratabilir."
+      "description": "Otomatik yeniden başlatma tamamlanamadı. Kimlik bilgileri güncellendi, ancak çalışan Codex CLI arka plan hizmeti yeni bir terminalde bile önceki hesabı kullanabilir. Etkin işleri tamamlayın, aşağıdaki komutu çalıştırın ve CLI’yi yeniden açın. Paylaşılan hizmeti yeniden başlatmak bağlı oturumları kesintiye uğratabilir."
     },
     "launchErrors": {
       "bindingFailed": "Hesap bağlantısı doğrulanamadı. Başlatma durduruldu; hesap değiştirmeyi yeniden deneyin.",

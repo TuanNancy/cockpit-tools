@@ -7,7 +7,7 @@ import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useModalScrollLock } from '../hooks/useModalScrollLock';
 import './CodexCliDaemonNotice.css';
 
-/** Independent of launch progress: writing auth succeeds even if app launch fails. */
+/** Manual fallback when automatic daemon restart fails after credentials were written. */
 export function CodexCliDaemonNotice() {
   const { t } = useTranslation();
   const [command, setCommand] = useState<string | null>(null);
