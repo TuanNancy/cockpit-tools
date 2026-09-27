@@ -17,11 +17,15 @@ async fn is_running(codex_home: &Path) -> bool {
     )
 }
 
-#[cfg(any(target_os = "macos", all(test, unix)))]
-fn restart_command(codex_home: &Path) -> String {
+#[cfg(any(target_os = "macos", test))]
+fn restart_command(codex_home: &Path) -> std::io::Result<String> {
+    // The user's terminal may have a different working directory than Cockpit.
+    let codex_home = std::path::absolute(codex_home)?;
     // Quote the exact profile, including spaces, apostrophes and shell metacharacters.
     let home = codex_home.to_string_lossy().replace('\'', "'\"'\"'");
-    format!("CODEX_HOME='{home}' codex app-server daemon restart")
+    Ok(format!(
+        "CODEX_HOME='{home}' codex app-server daemon restart"
+    ))
 }
 
 /// Call only after credentials have been committed. The shared daemon may have
@@ -29,7 +33,7 @@ fn restart_command(codex_home: &Path) -> String {
 pub async fn restart_notice(codex_home: &Path) -> Option<String> {
     #[cfg(target_os = "macos")]
     if is_running(codex_home).await {
-        return Some(restart_command(codex_home));
+        return restart_command(codex_home).ok();
     }
     let _ = codex_home;
     None
@@ -81,7 +85,7 @@ mod tests {
         #[cfg(target_os = "macos")]
         assert_eq!(
             restart_notice(&home.0).await,
-            Some(restart_command(&home.0))
+            Some(restart_command(&home.0).unwrap())
         );
 
         drop(listener);
@@ -96,12 +100,57 @@ mod tests {
         std::fs::write(home.socket(), b"not a socket").unwrap();
         assert!(!is_running(&home.0).await);
     }
+}
 
+#[cfg(test)]
+mod command_tests {
+    use super::*;
+
+    #[cfg(unix)]
     #[test]
     fn restart_command_quotes_the_switched_profile() {
         assert_eq!(
-            restart_command(Path::new("/tmp/Alice's Codex/$profile")),
+            restart_command(Path::new("/tmp/Alice's Codex/$profile")).unwrap(),
             "CODEX_HOME='/tmp/Alice'\"'\"'s Codex/$profile' codex app-server daemon restart",
         );
+    }
+
+    #[test]
+    fn restart_command_resolves_relative_home_against_cockpit_working_directory() {
+        let relative = Path::new("profiles/team-a");
+        let absolute = std::env::current_dir().unwrap().join(relative);
+        assert_eq!(
+            restart_command(relative).unwrap(),
+            restart_command(&absolute).unwrap(),
+        );
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn restart_command_keeps_profile_and_arguments_in_a_different_terminal_directory() {
+        let relative = Path::new("Alice's Codex/$profile;$(echo wrong)`echo wrong`");
+        let expected_home = std::env::current_dir().unwrap().join(relative);
+        // A shell function captures arguments only; no real Codex is started.
+        let script = format!(
+            "codex() {{ printf '%s\\n' \"$CODEX_HOME\" \"$@\"; }}; {}",
+            restart_command(relative).unwrap(),
+        );
+        let output = std::process::Command::new("/bin/sh")
+            .arg("-c")
+            .arg(script)
+            .current_dir("/")
+            .output()
+            .unwrap();
+        assert!(output.status.success());
+        assert_eq!(
+            String::from_utf8(output.stdout).unwrap(),
+            format!("{}\napp-server\ndaemon\nrestart\n", expected_home.display()),
+        );
+    }
+
+    #[cfg(not(target_os = "macos"))]
+    #[tokio::test]
+    async fn unsupported_platform_does_not_request_a_daemon_restart() {
+        assert_eq!(restart_notice(Path::new("profiles/team-a")).await, None);
     }
 }

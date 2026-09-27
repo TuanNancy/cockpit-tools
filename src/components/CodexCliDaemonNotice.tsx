@@ -13,8 +13,12 @@ export function CodexCliDaemonNotice() {
   const [command, setCommand] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
+  const copyRevision = useRef(0);
   const root = useRef<HTMLDivElement>(null);
-  const close = () => setCommand(null);
+  const close = () => {
+    copyRevision.current += 1;
+    setCommand(null);
+  };
   useEscCloseTopmost(command !== null, close);
   useModalFocusTrap(root, command !== null);
   useModalScrollLock(command !== null);
@@ -24,15 +28,19 @@ export function CodexCliDaemonNotice() {
     let unlisten: (() => void) | undefined;
     void listen<string>('codex:cli-daemon-restart-required', ({ payload }) => {
       if (disposed || typeof payload !== 'string' || !payload) return;
+      copyRevision.current += 1;
       setCommand(payload);
       setCopied(false);
       setCopyFailed(false);
     }).then((cleanup) => {
       if (disposed) cleanup();
       else unlisten = cleanup;
+    }).catch((error: unknown) => {
+      if (!disposed) console.warn('[Codex CLI daemon] Could not listen for restart notices', error);
     });
     return () => {
       disposed = true;
+      copyRevision.current += 1;
       unlisten?.();
     };
   }, []);
@@ -40,11 +48,15 @@ export function CodexCliDaemonNotice() {
   if (!command) return null;
 
   const copyCommand = async () => {
+    const revision = ++copyRevision.current;
+    setCopied(false);
+    setCopyFailed(false);
     try {
       await navigator.clipboard.writeText(command);
+      if (revision !== copyRevision.current) return;
       setCopied(true);
-      setCopyFailed(false);
     } catch {
+      if (revision !== copyRevision.current) return;
       setCopyFailed(true);
     }
   };

@@ -173,13 +173,12 @@ jobs:
         with:
           key: ${{ matrix.platform }}-${{ matrix.label }}
 
-      - name: 🧪 Test Codex context preservation and daemon detection
+      - name: 🧪 Test Codex context preservation
         if: matrix.label == 'ubuntu-22.04'
         working-directory: src-tauri
         run: |
           cargo test instance_configuration_save --lib
           cargo test quick_config_catalog_only_context_preservation --lib
-          cargo test codex_cli_daemon --lib
 
       - name: 🐹 Go setup
         uses: actions/setup-go@v5
@@ -198,6 +197,11 @@ jobs:
 
       - name: 🔄 Sync versions
         run: npm run sync-version
+
+      - name: 🧪 Test Codex CLI daemon detection
+        if: matrix.label == 'ubuntu-22.04' || matrix.label == 'macos-aarch64'
+        working-directory: src-tauri
+        run: cargo test codex_cli_daemon --lib
 
       - name: 🧪 Test core Rust library
         if: matrix.label == 'ubuntu-22.04'
