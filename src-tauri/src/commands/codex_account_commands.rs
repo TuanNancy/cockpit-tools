@@ -1202,6 +1202,15 @@ pub async fn switch_codex_account(
         )
         .await
     };
+    // Credentials are already committed even if a later launch fails or the user
+    // cancels. A shared CLI daemon can still retain the previous account (#2621).
+    if switch_result.is_ok() {
+        if let Some(command) =
+            crate::modules::codex_cli_daemon::restart_notice(&codex_account::get_codex_home()).await
+        {
+            let _ = app.emit("codex:cli-daemon-restart-required", command);
+        }
+    }
     ensure_codex_switch_not_cancelled(&account_id)?;
     let account = match switch_result {
         Ok(account) => account,
