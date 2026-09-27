@@ -158,7 +158,7 @@ func TestProviderGatewayItemIDRewriterLeavesOtherPayloadsUntouched(t *testing.T)
 	}
 }
 
-func TestProviderGatewayResponsesStreamPreservesReasoningIdentity(t *testing.T) {
+func TestProviderGatewayResponsesStreamPreservesReasoningIdentityWithSSEEnvelope(t *testing.T) {
 	for _, id := range []string{"rs_" + strings.Repeat("x", 80), "opaque-upstream-id", " rs_with_spaces "} {
 		t.Run(id, func(t *testing.T) {
 			// The encrypted payload only arrives at done, after the client has

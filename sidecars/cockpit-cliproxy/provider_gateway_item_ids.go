@@ -40,8 +40,8 @@ func providerGatewayItemIDPrefix(itemType string) string {
 // without ids at all), and the client persists whatever it receives. Once such a
 // conversation is replayed against an official account, the strict official
 // validator rejects the whole request with invalid_id_prefix. Rewriting the ids
-// here repairs replayable tool/message history. Existing reasoning IDs are
-// opaque: encrypted_content can be bound to the exact upstream ID.
+// here repairs unsigned item identities. Existing reasoning IDs are opaque:
+// encrypted_content may bind to them, even if it only arrives in a later event.
 type providerGatewayItemIDRewriter struct {
 	mapped map[string]string
 	used   map[string]bool
