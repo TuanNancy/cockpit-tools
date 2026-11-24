@@ -1717,6 +1717,31 @@ mod tests {
     }
 
     #[test]
+    fn unknown_provider_models_keep_explicit_reasoning_selection() {
+        // A custom provider model is not part of the bundled catalog. A
+        // reasoning level the user explicitly declared must reach the client
+        // instead of being silently narrowed back to the unknown-model
+        // fallback levels (low/medium/high/xhigh).
+        let catalog = build_codex_client_models_response_with_model_definitions_and_reasoning(&[(
+            "my-relay-model".into(),
+            "My Relay Model".into(),
+            Some(vec!["max".into()]),
+        )]);
+        let model = &catalog["models"][0];
+        let efforts = model["supported_reasoning_levels"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter_map(|level| level["effort"].as_str())
+            .collect::<Vec<_>>();
+        assert!(
+            efforts.contains(&"max"),
+            "declared effort was dropped: {efforts:?}"
+        );
+        assert_eq!(model["default_reasoning_level"], "max");
+    }
+
+    #[test]
     fn reserve_is_selectable_without_changing_other_models_or_request_id() {
         let mut catalog = build_codex_client_models_response(&[
             "gpt-6-astra".to_string(),
