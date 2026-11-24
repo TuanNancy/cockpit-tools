@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Nếu email tài khoản OpenAI đã thay đổi, hãy cấp quyền lại cho cùng tài khoản và không gian làm việc để cập nhật email tại đây.",
+      "emailHint": "Chỉ các tài khoản dùng token truy cập cá nhân at-* mới có thể đổi nhãn email này.",
+      "emailPlaceholder": "Nhập email tài khoản",
+      "emailInvalid": "Địa chỉ email không hợp lệ",
       "title": "Ghi chú tài khoản",
       "label": "Ghi chú tài khoản",
       "desc": "Thêm mật khẩu, 2FA, URL email, điện thoại và ghi chú khác cho {{account}}.",

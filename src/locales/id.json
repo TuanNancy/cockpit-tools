@@ -5044,6 +5044,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Jika email akun OpenAI Anda berubah, otorisasi ulang akun dan ruang kerja yang sama untuk memperbaruinya di sini.",
+      "emailHint": "Hanya akun token akses pribadi at-* yang dapat mengubah label email ini.",
+      "emailPlaceholder": "Masukkan email akun",
+      "emailInvalid": "Format email tidak valid",
       "title": "Catatan Akun",
       "label": "Catatan Akun",
       "desc": "Tambahkan kata sandi, 2FA, URL email, telepon, dan catatan lain untuk {{account}}.",

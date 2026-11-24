@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Si l’adresse e-mail de votre compte OpenAI a changé, autorisez à nouveau le même compte et le même espace de travail pour la mettre à jour ici.",
+      "emailHint": "Seuls les comptes de jeton d'accès personnel at-* peuvent modifier ce libellé d'e-mail.",
+      "emailPlaceholder": "Saisir l'e-mail du compte",
+      "emailInvalid": "Adresse e-mail invalide",
       "title": "Note de compte",
       "label": "Note de compte",
       "desc": "Ajoutez mot de passe, 2FA, URL mail, téléphone et autres notes pour {{account}}.",

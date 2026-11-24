@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Se o e-mail da sua conta OpenAI mudou, autorize novamente a mesma conta e o mesmo espaço de trabalho para atualizá-lo aqui.",
+      "emailHint": "Somente contas com token de acesso pessoal at-* podem alterar este rótulo de e-mail.",
+      "emailPlaceholder": "Digite o e-mail da conta",
+      "emailInvalid": "Endereço de e-mail inválido",
       "title": "Nota da conta",
       "label": "Nota da conta",
       "desc": "Adicione senha, 2FA, URL de e-mail, telefone e outras notas para {{account}}.",

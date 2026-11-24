@@ -183,6 +183,8 @@ export interface CodexAccountNoteUpdate {
   phoneNumber?: string;
   mailUrl?: string;
   chatgptAccountId?: string;
+  /** Only honored for at-* access-token-only accounts. */
+  email?: string;
 }
 
 export function isStandardCodexOAuthAccount(account?: CodexAccount | null): boolean {

@@ -453,6 +453,7 @@ fn codex_account_note_update_from_value(value: &serde_json::Value) -> CodexAccou
             ],
         ),
         mail_url: read_account_mail_url(value),
+        email: None,
     }
 }
 
@@ -462,6 +463,7 @@ fn has_codex_account_note_update(update: &CodexAccountNoteUpdate) -> bool {
         || update.account_password.is_some()
         || update.phone_number.is_some()
         || update.mail_url.is_some()
+        || update.email.is_some()
 }
 
 fn merge_codex_account_note_update(
@@ -483,6 +485,9 @@ fn merge_codex_account_note_update(
     if primary.mail_url.is_none() {
         primary.mail_url = fallback.mail_url;
     }
+    if primary.email.is_none() {
+        primary.email = fallback.email;
+    }
     primary
 }
 
@@ -495,6 +500,7 @@ fn codex_account_note_update_from_hints(
         account_password: hints.account_password.clone(),
         phone_number: hints.phone_number.clone(),
         mail_url: hints.mail_url.clone(),
+        email: None,
     }
 }
 
@@ -642,6 +648,7 @@ fn codex_account_note_update_from_account(account: &CodexAccount) -> CodexAccoun
         account_password: account.account_password.clone(),
         phone_number: account.phone_number.clone(),
         mail_url: account.mail_url.clone(),
+        email: None,
     }
 }
 
@@ -1195,6 +1202,31 @@ pub fn import_access_token_account(
     )
 }
 
+/// Re-import dedup for AT-only accounts whose email label was edited by the
+/// user. The normal lookup is email-based, so it no longer matches after an
+/// edit; fall back to the immutable token itself and keep the existing record.
+fn find_existing_access_token_account_id(
+    index: &crate::models::codex::CodexAccountIndex,
+    access_token: &str,
+) -> Option<String> {
+    if !is_opaque_access_token(access_token) {
+        return None;
+    }
+    index.accounts.iter().find_map(|summary| {
+        let account = load_account(&summary.id)?;
+        if account.openai_api_key.is_some() || account.agent_identity.is_some() {
+            return None;
+        }
+        if !is_opaque_access_token(&account.tokens.access_token) {
+            return None;
+        }
+        if normalize_optional_ref(account.tokens.refresh_token.as_deref()).is_some() {
+            return None;
+        }
+        (account.tokens.access_token.trim() == access_token.trim()).then_some(account.id)
+    })
+}
+
 fn upsert_account_from_access_token_with_hints(
     access_token: String,
     hints: CodexAccessTokenImportHints,
@@ -1235,22 +1267,27 @@ fn upsert_account_from_access_token_with_hints(
             .clone()
             .or(token_subscription),
     );
+    let mut index = load_account_index();
+    let existing_at_token_id = find_existing_access_token_account_id(&index, &access_token);
+
     let mut tokens = CodexTokens {
         id_token: String::new(),
         access_token,
         refresh_token: None,
     };
 
-    let mut index = load_account_index();
     let generated_id =
         build_account_storage_id(&email, account_id.as_deref(), organization_id.as_deref());
-    let existing_id = find_existing_account_id(
-        &index,
-        &email,
-        account_id.as_deref(),
-        organization_id.as_deref(),
-    )
-    .unwrap_or_else(|| generated_id.clone());
+    let existing_id = existing_at_token_id
+        .or_else(|| {
+            find_existing_account_id(
+                &index,
+                &email,
+                account_id.as_deref(),
+                organization_id.as_deref(),
+            )
+        })
+        .unwrap_or_else(|| generated_id.clone());
 
     let mut account = if let Some(mut acc) = load_account(&existing_id) {
         tokens = retain_existing_refresh_token_if_missing(tokens, Some(&acc));
@@ -1418,6 +1455,7 @@ fn try_parse_pending_oauth_delimited_line(line: &str) -> Option<(String, CodexAc
             account_password: normalize_optional_ref(Some(password)),
             phone_number: None,
             mail_url: normalize_optional_ref(Some(mail_url)),
+            email: None,
         },
     ))
 }

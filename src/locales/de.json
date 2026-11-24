@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Wenn sich die E-Mail-Adresse deines OpenAI-Kontos geändert hat, autorisiere dasselbe Konto und denselben Arbeitsbereich erneut, um sie hier zu aktualisieren.",
+      "emailHint": "Nur at-* personale Zugriffstoken-Konten können diese E-Mail-Bezeichnung ändern.",
+      "emailPlaceholder": "Konto-E-Mail eingeben",
+      "emailInvalid": "Ungültige E-Mail-Adresse",
       "title": "Kontonotiz",
       "label": "Kontonotiz",
       "desc": "Füge Passwort, 2FA, Mail-URL, Telefon und weitere Notizen für {{account}} hinzu.",

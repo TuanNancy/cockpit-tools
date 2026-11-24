@@ -2394,7 +2394,10 @@ export function useCodexAccountsBaseController() {
           phoneNumber: activeAccountNoteForm.phoneNumber,
           mailUrl: activeAccountNoteForm.mailUrl,
           ...(activeAccountUsesPersonalAccessToken
-            ? { chatgptAccountId: activeAccountNoteForm.chatgptAccountId }
+            ? {
+                chatgptAccountId: activeAccountNoteForm.chatgptAccountId,
+                email: activeAccountNoteForm.email,
+              }
             : {}),
         };
 

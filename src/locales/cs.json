@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "Pokud se e-mail účtu OpenAI změnil, znovu autorizujte stejný účet a pracovní prostor, aby se zde aktualizoval.",
+      "emailHint": "Tuto popisku e-mailu mohou měnit pouze účty s osobním přístupovým tokenem at-*.",
+      "emailPlaceholder": "Zadejte e-mail účtu",
+      "emailInvalid": "Neplatná e-mailová adresa",
       "title": "Poznámka účtu",
       "label": "Poznámka účtu",
       "desc": "Přidejte heslo, 2FA, URL e-mailu, telefon a další poznámky pro {{account}}.",

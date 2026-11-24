@@ -138,6 +138,7 @@ export type CodexAccountNoteFormState = {
   phoneNumber: string;
   mailUrl: string;
   chatgptAccountId: string;
+  email: string;
 };
 
 export type CodexAccountNoteMailPreviewState = MailVerificationCodePreview & {
@@ -162,6 +163,7 @@ export const EMPTY_CODEX_ACCOUNT_NOTE_FORM: CodexAccountNoteFormState = {
   phoneNumber: "",
   mailUrl: "",
   chatgptAccountId: "",
+  email: "",
 };
 
 export function buildCodexAccountNoteForm(
@@ -174,6 +176,7 @@ export function buildCodexAccountNoteForm(
     phoneNumber: account?.phone_number ?? "",
     mailUrl: account?.mail_url ?? "",
     chatgptAccountId: account?.account_id ?? "",
+    email: account?.email ?? "",
   };
 }
 

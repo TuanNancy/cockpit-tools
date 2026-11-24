@@ -3501,6 +3501,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "If your OpenAI account email changed, reauthorize the same account and workspace to update it here.",
+      "emailHint": "Only at-* personal access tokens can change this email label.",
+      "emailPlaceholder": "Enter account email",
+      "emailInvalid": "Invalid email address",
       "title": "Account Note",
       "label": "Account Note",
       "desc": "Add password, 2FA, mail URL, phone, and other notes for {{account}}.",

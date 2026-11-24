@@ -2327,6 +2327,56 @@ export function CodexAccountsOverviewPanel(props: CodexAccountsViewProps) {
                             </span>
                           ) : null}
                         </>
+                      ) : activeAccountUsesPersonalAccessToken ? (
+                        <>
+                          <div className="codex-account-note-input-row">
+                            <input
+                              className="codex-account-note-input"
+                              type="email"
+                              value={activeAccountNoteForm.email}
+                              onChange={(event) => {
+                                updateActiveAccountNoteForm({
+                                  email: event.target.value,
+                                });
+                              }}
+                              placeholder={t(
+                                "codex.accountNote.emailPlaceholder",
+                                "输入账号邮箱",
+                              )}
+                              disabled={activeAccountNoteSaving}
+                              autoComplete="off"
+                              spellCheck={false}
+                            />
+                            <button
+                              type="button"
+                              className="codex-account-note-icon-btn"
+                              onClick={() =>
+                                void copyAccountNoteValue(
+                                  "modal:email",
+                                  activeAccountNoteForm.email,
+                                )
+                              }
+                              disabled={
+                                activeAccountNoteSaving ||
+                                !activeAccountNoteForm.email.trim()
+                              }
+                              aria-label={t("common.copy", "复制")}
+                              title={t("common.copy", "复制")}
+                            >
+                              {accountNoteCopiedKey === "modal:email" ? (
+                                <Check size={14} />
+                              ) : (
+                                <Copy size={14} />
+                              )}
+                            </button>
+                          </div>
+                          <small className="codex-account-note-field-hint">
+                            {t(
+                              "codex.accountNote.emailHint",
+                              "仅 at-* 个人访问令牌账号可修改邮箱标签。",
+                            )}
+                          </small>
+                        </>
                       ) : (
                         <div className="codex-account-note-readonly-row">
                           <span

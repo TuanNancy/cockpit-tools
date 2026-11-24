@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "OpenAI 계정의 이메일이 변경된 경우 동일한 계정과 워크스페이스를 다시 인증하면 여기에서 업데이트됩니다.",
+      "emailHint": "at-* 개인 액세스 토큰 계정만 이 이메일 라벨을 변경할 수 있습니다.",
+      "emailPlaceholder": "계정 이메일 입력",
+      "emailInvalid": "이메일 형식이 올바르지 않습니다",
       "title": "계정 메모",
       "label": "계정 메모",
       "desc": "{{account}}에 비밀번호, 2FA, 메일 URL, 전화번호, 기타 메모를 추가합니다.",

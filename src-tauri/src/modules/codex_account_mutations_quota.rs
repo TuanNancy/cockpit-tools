@@ -224,6 +224,9 @@ pub struct CodexAccountNoteUpdate {
     pub account_password: Option<String>,
     pub phone_number: Option<String>,
     pub mail_url: Option<String>,
+    /// Only honored for `at-*` access-token-only accounts. Kept optional so all
+    /// existing note-update callers stay source compatible.
+    pub email: Option<String>,
 }
 
 fn apply_account_note_update(account: &mut CodexAccount, update: CodexAccountNoteUpdate) {
@@ -244,14 +247,53 @@ fn apply_account_note_update(account: &mut CodexAccount, update: CodexAccountNot
     }
 }
 
+/// Validate a newly supplied email label. Existing labels imported from an
+/// access token may be placeholders (`codex-access-<fingerprint>`); those are
+/// not re-validated, only the value the user is writing now.
+fn normalize_editable_account_email(value: &str) -> Result<String, String> {
+    let trimmed = value.trim();
+    if trimmed.is_empty() {
+        return Err("邮箱不能为空".to_string());
+    }
+    if trimmed.len() > 254
+        || trimmed
+            .chars()
+            .any(|character| character.is_control() || character.is_whitespace())
+    {
+        return Err("邮箱格式无效".to_string());
+    }
+    let Some((local, domain)) = trimmed.split_once('@') else {
+        return Err("邮箱格式无效".to_string());
+    };
+    if local.is_empty()
+        || domain.is_empty()
+        || domain.contains('@')
+        || !domain.contains('.')
+        || domain.split('.').any(|part| part.is_empty())
+    {
+        return Err("邮箱格式无效".to_string());
+    }
+    Ok(trimmed.to_string())
+}
+
+/// Mirrors `isCodexOpaqueAccessTokenOnlyAccount` in src/types/codex.ts.
+fn account_email_is_editable(account: &CodexAccount) -> bool {
+    is_opaque_access_token(&account.tokens.access_token)
+        && normalize_optional_ref(account.tokens.refresh_token.as_deref()).is_none()
+        && account.openai_api_key.is_none()
+        && account.agent_identity.is_none()
+}
+
 pub fn update_account_note(
     account_id: &str,
-    update: CodexAccountNoteUpdate,
+    mut update: CodexAccountNoteUpdate,
     chatgpt_account_id: Option<String>,
 ) -> Result<CodexAccount, String> {
     let mut account =
         load_account(account_id).ok_or_else(|| format!("账号不存在: {}", account_id))?;
 
+    let requested_email = update.email.take();
+    let previous_email = account.email.clone();
     apply_account_note_update(&mut account, update);
     let previous_chatgpt_account_id = account.account_id.clone();
     if let Some(chatgpt_account_id) = chatgpt_account_id {
@@ -271,14 +313,28 @@ pub fn update_account_note(
         }
         account.account_id = normalized_chatgpt_account_id;
     }
+    if let Some(requested_email) = requested_email {
+        if !account_email_is_editable(&account) {
+            return Err("仅 at-* 个人访问令牌账号支持修改邮箱".to_string());
+        }
+        account.email = normalize_editable_account_email(&requested_email)?;
+    }
     save_account(&account)?;
 
-    if account.account_id != previous_chatgpt_account_id {
+    if account.email != previous_email {
+        let mut index = load_account_index();
+        if let Some(summary) = index.accounts.iter_mut().find(|item| item.id == account.id) {
+            summary.email = account.email.clone();
+            save_account_index(&index)?;
+        }
+    }
+
+    if account.account_id != previous_chatgpt_account_id || account.email != previous_email {
         if let Err(error) =
             crate::modules::codex_local_access::sync_sidecar_auth_file_for_account(&account)
         {
             logger::log_warn(&format!(
-                "同步 ChatGPT Workspace ID 到 API Service sidecar 失败: account_id={}, error={}",
+                "同步账号邮箱/Workspace ID 到 API Service sidecar 失败: account_id={}, error={}",
                 account.id, error
             ));
         }

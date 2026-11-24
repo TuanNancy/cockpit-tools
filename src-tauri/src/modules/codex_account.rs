@@ -31,6 +31,7 @@ mod tests {
     include!("codex_account_tests_batch_import_pressure.rs");
     include!("codex_account_tests_identity_import_refresh.rs");
     include!("codex_account_tests_reauth_email.rs");
+    include!("codex_account_tests_email_edit.rs");
     include!("codex_account_tests_live_authority.rs");
     include!("codex_account_tests_auth_projection_identity.rs");
     include!("codex_account_tests_cli_daemon.rs");

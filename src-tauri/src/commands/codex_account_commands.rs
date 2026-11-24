@@ -2826,6 +2826,7 @@ pub async fn update_codex_account_note(
     phone_number: Option<String>,
     mail_url: Option<String>,
     chatgpt_account_id: Option<String>,
+    email: Option<String>,
 ) -> Result<CodexAccount, String> {
     codex_account::update_account_note(
         &account_id,
@@ -2835,6 +2836,7 @@ pub async fn update_codex_account_note(
             account_password,
             phone_number,
             mail_url,
+            email,
         },
         chatgpt_account_id,
     )
@@ -2857,6 +2859,7 @@ pub async fn create_pending_codex_oauth_account(
             account_password,
             phone_number,
             mail_url,
+            email: None,
         },
     )
 }

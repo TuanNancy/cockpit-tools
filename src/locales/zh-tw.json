@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "如果 OpenAI 帳號的電子郵件地址已變更，請重新授權同一個帳號和工作區以更新此處的電子郵件地址。",
+      "emailHint": "僅 at-* 個人存取權杖帳號可修改郵箱標籤。",
+      "emailPlaceholder": "輸入帳號郵箱",
+      "emailInvalid": "郵箱格式無效",
       "title": "帳號備註",
       "label": "帳號備註",
       "desc": "給 {{account}} 填寫密碼、2FA、郵件地址、手機號和其他備註。",

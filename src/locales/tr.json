@@ -4997,6 +4997,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "OpenAI hesabınızın e-posta adresi değiştiyse burada güncellemek için aynı hesabı ve çalışma alanını yeniden yetkilendirin.",
+      "emailHint": "Yalnızca at-* kişisel erişim belirteci hesapları bu e-posta etiketini değiştirebilir.",
+      "emailPlaceholder": "Hesap e-postasını girin",
+      "emailInvalid": "Geçersiz e-posta adresi",
       "title": "Hesap Notu",
       "label": "Hesap Notu",
       "desc": "{{account}} için parola, 2FA, posta URL’si, telefon ve diğer notları ekleyin.",

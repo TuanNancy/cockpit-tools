@@ -3501,6 +3501,9 @@
     },
     "accountNote": {
       "refreshEmailHint": "如果 OpenAI 账号邮箱已变更，请重新授权同一个账号和工作区以更新这里的邮箱。",
+      "emailHint": "仅 at-* 个人访问令牌账号可修改邮箱标签。",
+      "emailPlaceholder": "输入账号邮箱",
+      "emailInvalid": "邮箱格式无效",
       "title": "账号备注",
       "label": "账号备注",
       "desc": "给 {{account}} 填写密码、2FA、邮件地址、手机号和其他备注。",
